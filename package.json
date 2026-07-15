@@ -1,0 +1,29 @@
+{
+  "name": "n8n-nodes-ehrbase",
+  "version": "1.0.0",
+  "description": "n8n integration for EHRBase (openEHR)",
+  "main": "dist/nodes/EHRBase/EHRBase.node.js",
+  "scripts": {
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "node -e \"const fs=require('fs'); if(!fs.existsSync('dist/nodes/EHRBase')) fs.mkdirSync('dist/nodes/EHRBase', {recursive:true}); if(fs.existsSync('nodes/EHRBase/ehrbase.svg')) fs.copyFileSync('nodes/EHRBase/ehrbase.svg', 'dist/nodes/EHRBase/ehrbase.svg'); \"",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.16.0",
+    "n8n-workflow": "^1.0.0",
+    "typescript": "^5.0.4"
+  },
+  "n8n": {
+    "nodes": [
+      "dist/nodes/EHRBase/EHRBase.node.js"
+    ],
+    "credentials": [
+      "dist/credentials/EHRBaseApi.credentials.js"
+    ]
+  }
+}

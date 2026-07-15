@@ -1,0 +1,30 @@
+services:
+  ehrdb:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ehrbase
+      POSTGRES_PASSWORD: ehrbase
+      POSTGRES_USER: postgres
+    volumes:
+      - ehrdb-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    restart: unless-stopped
+
+  ehrbase:
+    image: ehrbase/ehrbase:latest
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://ehrdb:5432/ehrbase
+      DB_USER: postgres
+      DB_PASS: ehrbase
+      DB_USER_ADMIN: postgres
+      DB_PASS_ADMIN: ehrbase
+      SECURITY_AUTHTYPE: NONE
+      SYSTEM_ALLOW-METRIC-ENDPOINT: "true"
+    depends_on:
+      - ehrdb
+    restart: unless-stopped
+
+volumes:
+  ehrdb-data:

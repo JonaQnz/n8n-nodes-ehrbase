@@ -1,0 +1,552 @@
+{
+  "name": "EHRBase Node Integration Test Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger-id",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "ehr",
+        "operation": "create",
+        "specifyEhrId": false,
+        "customEhrStatus": false
+      },
+      "id": "create-ehr-auto-id",
+      "name": "Create EHR (Auto ID)",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        300,
+        300
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "ehr",
+        "operation": "create",
+        "specifyEhrId": true,
+        "ehrId": "233dd000-0000-0000-0000-000000000000",
+        "customEhrStatus": false
+      },
+      "id": "create-ehr-custom-id",
+      "name": "Create EHR (Custom ID)",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        500,
+        150
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "ehr",
+        "operation": "get",
+        "getBy": "ehrId",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}"
+      },
+      "id": "get-ehr-by-id",
+      "name": "Get EHR by ID",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        500,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "ehrStatus",
+        "operation": "get",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}"
+      },
+      "id": "get-ehr-status",
+      "name": "Get EHR Status",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        700,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "ehrStatus",
+        "operation": "update",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}",
+        "precedingVersionUid": "={{ $json.uid.value }}",
+        "ehrStatusJson": "{\n  \"_type\": \"EHR_STATUS\",\n  \"archetype_node_id\": \"openEHR-EHR-EHR_STATUS.generic.v1\",\n  \"name\": {\n    \"_type\": \"DV_TEXT\",\n    \"value\": \"EHR Status\"\n  },\n  \"subject\": {\n    \"_type\": \"PARTY_SELF\"\n  },\n  \"is_queryable\": false,\n  \"is_modifiable\": true\n}"
+      },
+      "id": "update-ehr-status",
+      "name": "Update EHR Status",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        900,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "definition",
+        "operation": "uploadTemplate",
+        "sourceType": "string",
+        "templateXml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<template xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"http://schemas.openehr.org/v1\">\n  <language>\n    <terminology_id>\n      <value>ISO_639-1</value>\n    </terminology_id>\n    <code_string>en</code_string>\n  </language>\n  <description>\n    <original_author id=\"Original Author\">Not Specified</original_author>\n    <lifecycle_state>Initial</lifecycle_state>\n    <details>\n      <language>\n        <terminology_id>\n          <value>ISO_639-1</value>\n        </terminology_id>\n        <code_string>en</code_string>\n      </language>\n      <purpose>Not Specified</purpose>\n    </details>\n  </description>\n  <uid>\n    <value>711d7d49-b3c6-4a6a-a6b4-a4bd02fc353d</value>\n  </uid>\n  <template_id>\n    <value>minimal_evaluation.en.v1</value>\n  </template_id>\n  <concept>Minimal evaluation</concept>\n  <definition>\n    <rm_type_name>COMPOSITION</rm_type_name>\n    <occurrences>\n      <lower_included>true</lower_included>\n      <upper_included>true</upper_included>\n      <lower_unbounded>false</lower_unbounded>\n      <upper_unbounded>false</upper_unbounded>\n      <lower>1</lower>\n      <upper>1</upper>\n    </occurrences>\n    <node_id>at0000</node_id>\n    <attributes xsi:type=\"C_MULTIPLE_ATTRIBUTE\">\n      <rm_attribute_name>content</rm_attribute_name>\n      <existence>\n        <lower_included>true</lower_included>\n        <upper_included>true</upper_included>\n        <lower_unbounded>false</lower_unbounded>\n        <upper_unbounded>false</upper_unbounded>\n        <lower>0</lower>\n        <upper>1</upper>\n      </existence>\n      <children xsi:type=\"C_ARCHETYPE_ROOT\">\n        <rm_type_name>EVALUATION</rm_type_name>\n        <occurrences>\n          <lower_included>true</lower_included>\n          <lower_unbounded>false</lower_unbounded>\n          <upper_unbounded>true</upper_unbounded>\n          <lower>0</lower>\n        </occurrences>\n        <node_id>at0000</node_id>\n        <attributes xsi:type=\"C_SINGLE_ATTRIBUTE\">\n          <rm_attribute_name>data</rm_attribute_name>\n          <existence>\n            <lower_included>true</lower_included>\n            <upper_included>true</upper_included>\n            <lower_unbounded>false</lower_unbounded>\n            <upper_unbounded>false</upper_unbounded>\n            <lower>1</lower>\n            <upper>1</upper>\n          </existence>\n          <children xsi:type=\"C_COMPLEX_OBJECT\">\n            <rm_type_name>ITEM_TREE</rm_type_name>\n            <occurrences>\n              <lower_included>true</lower_included>\n              <upper_included>true</upper_included>\n              <lower_unbounded>false</lower_unbounded>\n              <upper_unbounded>false</upper_unbounded>\n              <lower>1</lower>\n              <upper>1</upper>\n            </occurrences>\n            <node_id>at0001</node_id>\n            <attributes xsi:type=\"C_MULTIPLE_ATTRIBUTE\">\n              <rm_attribute_name>items</rm_attribute_name>\n              <existence>\n                <lower_included>true</lower_included>\n                <upper_included>true</upper_included>\n                <lower_unbounded>false</lower_unbounded>\n                <upper_unbounded>false</upper_unbounded>\n                <lower>0</lower>\n                <upper>1</upper>\n              </existence>\n              <children xsi:type=\"C_COMPLEX_OBJECT\">\n                <rm_type_name>ELEMENT</rm_type_name>\n                <occurrences>\n                  <lower_included>true</lower_included>\n                  <upper_included>true</upper_included>\n                  <lower_unbounded>false</lower_unbounded>\n                  <upper_unbounded>false</upper_unbounded>\n                  <lower>0</lower>\n                  <upper>1</upper>\n                </occurrences>\n                <node_id>at0002</node_id>\n                <attributes xsi:type=\"C_SINGLE_ATTRIBUTE\">\n                  <rm_attribute_name>value</rm_attribute_name>\n                  <existence>\n                    <lower_included>true</lower_included>\n                    <upper_included>true</upper_included>\n                    <lower_unbounded>false</lower_unbounded>\n                    <upper_unbounded>false</upper_unbounded>\n                    <lower>0</lower>\n                    <upper>1</upper>\n                  </existence>\n                  <children xsi:type=\"C_DV_QUANTITY\">\n                    <rm_type_name>DV_QUANTITY</rm_type_name>\n                    <occurrences>\n                      <lower_included>true</lower_included>\n                      <upper_included>true</upper_included>\n                      <lower_unbounded>false</lower_unbounded>\n                      <upper_unbounded>false</upper_unbounded>\n                      <lower>1</lower>\n                      <upper>1</upper>\n                    </occurrences>\n                    <node_id />\n                    <property>\n                      <terminology_id>\n                        <value>openehr</value>\n                      </terminology_id>\n                      <code_string>124</code_string>\n                    </property>\n                    <list>\n                      <units>kg</units>\n                    </list>\n                    <list>\n                      <units>mg</units>\n                    </list>\n                    <list>\n                      <units>gm</units>\n                    </list>\n                  </children>\n                </attributes>\n              </children>\n              <cardinality>\n                <is_ordered>false</is_ordered>\n                <is_unique>false</is_unique>\n                <interval>\n                  <lower_included>true</lower_included>\n                  <lower_unbounded>false</lower_unbounded>\n                  <upper_unbounded>true</upper_unbounded>\n                  <lower>0</lower>\n                </interval>\n              </cardinality>\n            </attributes>\n          </children>\n        </attributes>\n        <archetype_id>\n          <value>openEHR-EHR-EVALUATION.minimal.v1</value>\n        </archetype_id>\n        <term_definitions code=\"at0000\">\n          <items id=\"description\">unknown</items>\n          <items id=\"text\">Minimal</items>\n        </term_definitions>\n        <term_definitions code=\"at0001\">\n          <items id=\"description\">@ internal @</items>\n          <items id=\"text\">Arbol</items>\n        </term_definitions>\n        <term_definitions code=\"at0002\">\n          <items id=\"description\">*</items>\n          <items id=\"text\">quantity</items>\n        </term_definitions>\n      </children>\n      <cardinality>\n        <is_ordered>false</is_ordered>\n        <is_unique>false</is_unique>\n        <interval>\n          <lower_included>true</lower_included>\n          <lower_unbounded>false</lower_unbounded>\n          <upper_unbounded>true</upper_unbounded>\n          <lower>0</lower>\n        </interval>\n      </cardinality>\n    </attributes>\n    <archetype_id>\n      <value>openEHR-EHR-COMPOSITION.minimal.v1</value>\n    </archetype_id>\n    <template_id>\n      <value>minimal_evaluation.en.v1</value>\n    </template_id>\n    <term_definitions code=\"at0000\">\n      <items id=\"description\">unknown</items>\n      <items id=\"text\">Minimal</items>\n    </term_definitions>\n  </definition>\n</template>"
+      },
+      "id": "upload-template",
+      "name": "Upload Template",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "definition",
+        "operation": "listTemplates"
+      },
+      "id": "list-templates",
+      "name": "List Templates",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        1300,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "composition",
+        "operation": "create",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}",
+        "format": "canonical",
+        "compositionPayload": "{\n  \"_type\": \"COMPOSITION\",\n  \"name\": {\n    \"_type\": \"DV_TEXT\",\n    \"value\": \"Minimal\"\n  },\n  \"archetype_details\": {\n    \"_type\": \"ARCHETYPE_DETAILS\",\n    \"archetype_id\": {\n      \"_type\": \"ARCHETYPE_ID\",\n      \"value\": \"openEHR-EHR-COMPOSITION.minimal.v1\"\n    },\n    \"template_id\": {\n      \"_type\": \"TEMPLATE_ID\",\n      \"value\": \"minimal_evaluation.en.v1\"\n    },\n    \"rm_version\": \"1.0.2\"\n  },\n  \"archetype_node_id\": \"openEHR-EHR-COMPOSITION.minimal.v1\",\n  \"language\": {\n    \"_type\": \"CODE_PHRASE\",\n    \"terminology_id\": {\n      \"_type\": \"TERMINOLOGY_ID\",\n      \"value\": \"ISO_639-1\"\n    },\n    \"code_string\": \"en\"\n  },\n  \"territory\": {\n    \"_type\": \"CODE_PHRASE\",\n    \"terminology_id\": {\n      \"_type\": \"TERMINOLOGY_ID\",\n      \"value\": \"ISO_3166-1\"\n    },\n    \"code_string\": \"DE\"\n  },\n  \"category\": {\n    \"_type\": \"DV_CODED_TEXT\",\n    \"value\": \"event\",\n    \"defining_code\": {\n      \"_type\": \"CODE_PHRASE\",\n      \"terminology_id\": {\n        \"_type\": \"TERMINOLOGY_ID\",\n        \"value\": \"openehr\"\n      },\n      \"code_string\": \"433\"\n    }\n  },\n  \"composer\": {\n    \"_type\": \"PARTY_IDENTIFIED\",\n    \"name\": \"Dr. Testing\"\n  },\n  \"content\": [\n    {\n      \"_type\": \"EVALUATION\",\n      \"name\": {\n        \"_type\": \"DV_TEXT\",\n        \"value\": \"Minimal\"\n      },\n      \"archetype_details\": {\n        \"_type\": \"ARCHETYPE_DETAILS\",\n        \"archetype_id\": {\n          \"_type\": \"ARCHETYPE_ID\",\n          \"value\": \"openEHR-EHR-EVALUATION.minimal.v1\"\n        },\n        \"template_id\": {\n          \"_type\": \"TEMPLATE_ID\",\n          \"value\": \"minimal_evaluation.en.v1\"\n        },\n        \"rm_version\": \"1.0.2\"\n      },\n      \"archetype_node_id\": \"openEHR-EHR-EVALUATION.minimal.v1\",\n      \"language\": {\n        \"_type\": \"CODE_PHRASE\",\n        \"terminology_id\": {\n          \"_type\": \"TERMINOLOGY_ID\",\n          \"value\": \"ISO_639-1\"\n        },\n        \"code_string\": \"en\"\n      },\n      \"encoding\": {\n        \"_type\": \"CODE_PHRASE\",\n        \"terminology_id\": {\n          \"_type\": \"TERMINOLOGY_ID\",\n          \"value\": \"IANA_character-sets\"\n        },\n        \"code_string\": \"UTF-8\"\n      },\n      \"subject\": {\n        \"_type\": \"PARTY_SELF\"\n      },\n      \"data\": {\n        \"_type\": \"ITEM_TREE\",\n        \"name\": {\n          \"_type\": \"DV_TEXT\",\n          \"value\": \"Arbol\"\n        },\n        \"archetype_node_id\": \"at0001\",\n        \"items\": [\n          {\n            \"_type\": \"ELEMENT\",\n            \"name\": {\n              \"_type\": \"DV_TEXT\",\n              \"value\": \"quantity\"\n            },\n            \"archetype_node_id\": \"at0002\",\n            \"value\": {\n              \"_type\": \"DV_QUANTITY\",\n              \"magnitude\": 1.5,\n              \"units\": \"kg\"\n            }\n          }\n        ]\n      }\n    }\n  ]\n}",
+        "options": {
+          "preferRepresentation": "representation"
+        }
+      },
+      "id": "create-composition",
+      "name": "Create Composition",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        1500,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "composition",
+        "operation": "get",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}",
+        "versionUid": "={{ $json.uid.value }}"
+      },
+      "id": "get-composition",
+      "name": "Get Composition",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        1700,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "composition",
+        "operation": "update",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}",
+        "versionedObjectUid": "={{ $json.uid.value.split('::')[0] }}",
+        "precedingVersionUid": "={{ $json.uid.value }}",
+        "format": "canonical",
+        "compositionPayload": "={\n  \"_type\": \"COMPOSITION\",\n  \"name\": {\n    \"_type\": \"DV_TEXT\",\n    \"value\": \"Minimal\"\n  },\n  \"archetype_details\": {\n    \"_type\": \"ARCHETYPE_DETAILS\",\n    \"archetype_id\": {\n      \"_type\": \"ARCHETYPE_ID\",\n      \"value\": \"openEHR-EHR-COMPOSITION.minimal.v1\"\n    },\n    \"template_id\": {\n      \"_type\": \"TEMPLATE_ID\",\n      \"value\": \"minimal_evaluation.en.v1\"\n    },\n    \"rm_version\": \"1.0.2\"\n  },\n  \"archetype_node_id\": \"openEHR-EHR-COMPOSITION.minimal.v1\",\n  \"language\": {\n    \"_type\": \"CODE_PHRASE\",\n    \"terminology_id\": {\n      \"_type\": \"TERMINOLOGY_ID\",\n      \"value\": \"ISO_639-1\"\n    },\n    \"code_string\": \"en\"\n  },\n  \"territory\": {\n    \"_type\": \"CODE_PHRASE\",\n    \"terminology_id\": {\n      \"_type\": \"TERMINOLOGY_ID\",\n      \"value\": \"ISO_3166-1\"\n    },\n    \"code_string\": \"DE\"\n  },\n  \"category\": {\n    \"_type\": \"DV_CODED_TEXT\",\n    \"value\": \"event\",\n    \"defining_code\": {\n      \"_type\": \"CODE_PHRASE\",\n      \"terminology_id\": {\n        \"_type\": \"TERMINOLOGY_ID\",\n        \"value\": \"openehr\"\n      },\n      \"code_string\": \"433\"\n    }\n  },\n  \"composer\": {\n    \"_type\": \"PARTY_IDENTIFIED\",\n    \"name\": \"Dr. Testing\"\n  },\n  \"content\": [\n    {\n      \"_type\": \"EVALUATION\",\n      \"name\": {\n        \"_type\": \"DV_TEXT\",\n        \"value\": \"Minimal\"\n      },\n      \"archetype_details\": {\n        \"_type\": \"ARCHETYPE_DETAILS\",\n        \"archetype_id\": {\n          \"_type\": \"ARCHETYPE_ID\",\n          \"value\": \"openEHR-EHR-EVALUATION.minimal.v1\"\n        },\n        \"template_id\": {\n          \"_type\": \"TEMPLATE_ID\",\n          \"value\": \"minimal_evaluation.en.v1\"\n        },\n        \"rm_version\": \"1.0.2\"\n      },\n      \"archetype_node_id\": \"openEHR-EHR-EVALUATION.minimal.v1\",\n      \"language\": {\n        \"_type\": \"CODE_PHRASE\",\n        \"terminology_id\": {\n          \"_type\": \"TERMINOLOGY_ID\",\n          \"value\": \"ISO_639-1\"\n        },\n        \"code_string\": \"en\"\n      },\n      \"encoding\": {\n        \"_type\": \"CODE_PHRASE\",\n        \"terminology_id\": {\n          \"_type\": \"TERMINOLOGY_ID\",\n          \"value\": \"IANA_character-sets\"\n        },\n        \"code_string\": \"UTF-8\"\n      },\n      \"subject\": {\n        \"_type\": \"PARTY_SELF\"\n      },\n      \"data\": {\n        \"_type\": \"ITEM_TREE\",\n        \"name\": {\n          \"_type\": \"DV_TEXT\",\n          \"value\": \"Arbol\"\n        },\n        \"archetype_node_id\": \"at0001\",\n        \"items\": [\n          {\n            \"_type\": \"ELEMENT\",\n            \"name\": {\n              \"_type\": \"DV_TEXT\",\n              \"value\": \"quantity\"\n            },\n            \"archetype_node_id\": \"at0002\",\n            \"value\": {\n              \"_type\": \"DV_QUANTITY\",\n              \"magnitude\": 2.5,\n              \"units\": \"kg\"\n            }\n          }\n        ]\n      }\n    }\n  ]\n}",
+        "options": {
+          "preferRepresentation": "representation"
+        }
+      },
+      "id": "update-composition",
+      "name": "Update Composition",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        1900,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "directory",
+        "operation": "create",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}",
+        "directoryPayload": "{\n  \"_type\": \"FOLDER\",\n  \"name\": {\n    \"_type\": \"DV_TEXT\",\n    \"value\": \"Root folder\"\n  },\n  \"archetype_node_id\": \"openEHR-EHR-FOLDER.generic.v1\"\n}"
+      },
+      "id": "create-directory",
+      "name": "Create Directory",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        2100,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "directory",
+        "operation": "get",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}",
+        "specifyVersionUid": false
+      },
+      "id": "get-directory",
+      "name": "Get Directory",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        2300,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "directory",
+        "operation": "update",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}",
+        "precedingVersionUid": "={{ $node[\"Create Directory\"].json.uid.value }}",
+        "directoryPayload": "{\n  \"_type\": \"FOLDER\",\n  \"name\": {\n    \"_type\": \"DV_TEXT\",\n    \"value\": \"Updated root folder\"\n  },\n  \"archetype_node_id\": \"openEHR-EHR-FOLDER.generic.v1\"\n}"
+      },
+      "id": "update-directory",
+      "name": "Update Directory",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        2500,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "directory",
+        "operation": "delete",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}",
+        "precedingVersionUid": "={{ $json.uid.value }}"
+      },
+      "id": "delete-directory",
+      "name": "Delete Directory",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        2700,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "query",
+        "operation": "executeAql",
+        "aql": "SELECT e/ehr_id/value FROM EHR e",
+        "additionalOptions": {}
+      },
+      "id": "execute-aql",
+      "name": "Execute AQL",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        2900,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "composition",
+        "operation": "delete",
+        "ehrId": "={{ $node[\"Create EHR (Auto ID)\"].json.ehr_id.value }}",
+        "precedingVersionUid": "={{ $node[\"Update Composition\"].json.uid.value }}"
+      },
+      "id": "delete-composition",
+      "name": "Delete Composition",
+      "type": "CUSTOM.ehrBase",
+      "typeVersion": 1,
+      "position": [
+        3100,
+        450
+      ],
+      "credentials": {
+        "ehrBaseApi": {
+          "id": "JYQnak8R9EgkobnB",
+          "name": "EHRBase Docker Instance"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Create EHR (Auto ID)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create EHR (Auto ID)": {
+      "main": [
+        [
+          {
+            "node": "Create EHR (Custom ID)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get EHR by ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get EHR by ID": {
+      "main": [
+        [
+          {
+            "node": "Get EHR Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get EHR Status": {
+      "main": [
+        [
+          {
+            "node": "Update EHR Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update EHR Status": {
+      "main": [
+        [
+          {
+            "node": "Upload Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Template": {
+      "main": [
+        [
+          {
+            "node": "List Templates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Templates": {
+      "main": [
+        [
+          {
+            "node": "Create Composition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Composition": {
+      "main": [
+        [
+          {
+            "node": "Get Composition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Composition": {
+      "main": [
+        [
+          {
+            "node": "Update Composition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Composition": {
+      "main": [
+        [
+          {
+            "node": "Create Directory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Directory": {
+      "main": [
+        [
+          {
+            "node": "Get Directory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Directory": {
+      "main": [
+        [
+          {
+            "node": "Update Directory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Directory": {
+      "main": [
+        [
+          {
+            "node": "Delete Directory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Directory": {
+      "main": [
+        [
+          {
+            "node": "Execute AQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute AQL": {
+      "main": [
+        [
+          {
+            "node": "Delete Composition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {}
+}
