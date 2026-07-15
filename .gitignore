@@ -20,8 +20,6 @@ dist/
 .env.development
 .env.test
 .env.production
-export.json
-import-credentials.json
 
 # Logs
 npm-debug.log*

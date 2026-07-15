@@ -121,13 +121,13 @@ To verify that the custom node functions correctly, we have provided two testing
 Run our standalone Node test runner against your local active Docker EHRBase instance:
 ```bash
 npm install --no-save axios
-node test-integration.js
+node test/test-integration.js
 ```
 It will run through all 16 operations sequentially and confirm successes.
 
 ### 2. Importable n8n Workflow
-We have generated a pre-configured n8n workflow file [EHRBase_Test_Workflow.json](EHRBase_Test_Workflow.json):
-1. Copy the contents of `EHRBase_Test_Workflow.json`.
+We have generated a pre-configured n8n workflow file [EHRBase_Test_Workflow.json](test/EHRBase_Test_Workflow.json):
+1. Copy the contents of `test/EHRBase_Test_Workflow.json`.
 2. Create a new workflow in your n8n UI and paste the JSON directly into the canvas.
 3. Execute the workflow to visually test every single node function.
 

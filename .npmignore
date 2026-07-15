@@ -1,19 +1,13 @@
 # Ignore development configurations
 docker-compose.yml
 init-db.sql
-enable-extension.sh
 
-# Ignore test files
-test-integration.js
-EHRBase_Test_Workflow.json
-import-credentials.json
-export.json
+# Ignore test folder (test runner, templates, workflows)
+test/
+
+# Ignore documentation artifacts
 task.md
 walkthrough.md
-
-# Ignore openEHR models used for testing
-minimal_evaluation.opt
-vg_Diagnosis.v1.1.0.t.json
 
 # Ignore editor settings
 .vscode/
