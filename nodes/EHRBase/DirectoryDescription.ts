@@ -25,6 +25,12 @@ export const directoryOperations: INodeProperties[] = [
 				action: 'Delete a directory',
 			},
 			{
+				name: 'Get or Create',
+				value: 'getOrCreate',
+				description: 'Get the directory structure, or create a default root if it does not exist',
+				action: 'Get or create a directory',
+			},
+			{
 				name: 'Get',
 				value: 'get',
 				description: 'Get the directory structure of an EHR',
@@ -103,7 +109,7 @@ export const directoryFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['directory'],
-				operation: ['create', 'update'],
+				operation: ['create', 'update', 'getOrCreate'],
 			},
 		},
 		description: 'The FOLDER structure JSON object representing the directory',

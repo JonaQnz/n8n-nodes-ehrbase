@@ -19,6 +19,12 @@ export const ehrOperations: INodeProperties[] = [
 				action: 'Create an ehr',
 			},
 			{
+				name: 'Ensure Exists',
+				value: 'ensureExists',
+				description: 'Ensure an EHR exists for a given subject (idempotent)',
+				action: 'Ensure an ehr exists',
+			},
+			{
 				name: 'Get',
 				value: 'get',
 				description: 'Get an EHR by EHR ID or by subject ID and namespace',
@@ -155,6 +161,38 @@ export const ehrFields: INodeProperties[] = [
 				resource: ['ehr'],
 				operation: ['get'],
 				getBy: ['subject'],
+			},
+		},
+		description: 'The namespace of the subject ID (e.g. Hospital-A)',
+	},
+
+	// ----------------------------------
+	// EHR: Ensure Exists
+	// ----------------------------------
+	{
+		displayName: 'Subject ID',
+		name: 'subjectId',
+		type: 'string',
+		default: '',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['ehr'],
+				operation: ['ensureExists'],
+			},
+		},
+		description: 'The subject external ID (e.g. patient ID)',
+	},
+	{
+		displayName: 'Subject Namespace',
+		name: 'subjectNamespace',
+		type: 'string',
+		default: '',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['ehr'],
+				operation: ['ensureExists'],
 			},
 		},
 		description: 'The namespace of the subject ID (e.g. Hospital-A)',

@@ -8,10 +8,11 @@ This node enables clinicians, developers, and integrators to build powerful medi
 
 ## Features
 
-This node covers the complete openEHR REST API surface exposed by EHRBase:
+This node covers the core openEHR REST API operations exposed by EHRBase:
 
 ### 1. EHR Management
 - **Create EHR**: Initialize an EHR with an auto-generated ID or specify a custom UUID.
+- **Ensure EHR Exists**: High-level workflow helper that idempotently ensures an EHR exists for a given subject ID/namespace, creating it if it doesn't.
 - **Get EHR**: Retrieve EHR metadata by EHR ID or by subject identification details.
 
 ### 2. EHR Status
@@ -24,19 +25,23 @@ This node covers the complete openEHR REST API surface exposed by EHRBase:
 - **List/Get Archetypes**: Query loaded archetypes.
 
 ### 4. Composition Management
+- **Commit Record**: High-level workflow helper to write a composition based on Subject ID/Namespace directly (automatically resolving or creating the underlying EHR).
 - **Create Composition**: Post clinical records (compositions) mapped to an uploaded template. Supports **Canonical JSON**, **Canonical XML**, **Flat**, and **Structured** formats.
+- **Create or Update Composition**: Idempotent upsert helper that creates or updates based on the presence of a Version UID.
 - **Get Composition**: Retrieve composition by its version UID.
 - **Update Composition**: Modify existing compositions (requires preceding version tracking).
 - **Delete Composition**: Logically delete compositions.
 
 ### 5. Directory Folder Structures
 - **Create Directory**: Establish standard directory folder paths for an EHR.
+- **Get or Create Directory**: Idempotent helper to fetch the root directory or create an empty one if it doesn't exist.
 - **Get Directory**: Retrieve directory trees.
 - **Update Directory**: Re-organize directory nodes.
 - **Delete Directory**: Wipe folder records.
 
 ### 6. AQL Queries
-- **Execute AQL**: Run ad-hoc **Archetype Query Language (AQL)** statements.
+- **Execute AQL**: Run ad-hoc **Archetype Query Language (AQL)** statements, now with native parameterization support.
+- **Execute Stored**: Execute stored queries by name and version.
 
 ---
 

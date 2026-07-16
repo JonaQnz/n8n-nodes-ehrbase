@@ -13,10 +13,22 @@ export const compositionOperations: INodeProperties[] = [
 		},
 		options: [
 			{
+				name: 'Commit Record',
+				value: 'commitRecord',
+				description: 'High-level helper to write a composition based on Subject ID/Namespace',
+				action: 'Commit a clinical record',
+			},
+			{
 				name: 'Create',
 				value: 'create',
 				description: 'Create a new composition in an EHR',
 				action: 'Create a composition',
+			},
+			{
+				name: 'Create or Update',
+				value: 'createOrUpdate',
+				description: 'Create a new composition, or update an existing one if a Version UID is provided',
+				action: 'Create or update a composition',
 			},
 			{
 				name: 'Delete',
@@ -55,12 +67,47 @@ export const compositionFields: INodeProperties[] = [
 			show: {
 				resource: ['composition'],
 			},
+			hide: {
+				operation: ['commitRecord'],
+			},
 		},
 		description: 'The EHR ID (UUID) where the composition is/will be stored',
 	},
 
 	// ----------------------------------
-	// Composition: Create
+	// Composition: Commit Record
+	// ----------------------------------
+	{
+		displayName: 'Subject ID',
+		name: 'subjectId',
+		type: 'string',
+		default: '',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['composition'],
+				operation: ['commitRecord'],
+			},
+		},
+		description: 'The ID of the subject (e.g. Patient ID)',
+	},
+	{
+		displayName: 'Subject Namespace',
+		name: 'subjectNamespace',
+		type: 'string',
+		default: '',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['composition'],
+				operation: ['commitRecord'],
+			},
+		},
+		description: 'The namespace of the subject ID (e.g. your system namespace)',
+	},
+
+	// ----------------------------------
+	// Composition: Create / Update / CreateOrUpdate / CommitRecord
 	// ----------------------------------
 	{
 		displayName: 'Format',
@@ -73,11 +120,6 @@ export const compositionFields: INodeProperties[] = [
 				description: 'Standard openEHR Canonical JSON format',
 			},
 			{
-				name: 'XML (Standard openEHR)',
-				value: 'xml',
-				description: 'Standard openEHR XML format',
-			},
-			{
 				name: 'EHRBase FLAT JSON',
 				value: 'flat',
 				description: 'EHRBase Flat format (requires Template ID)',
@@ -87,30 +129,38 @@ export const compositionFields: INodeProperties[] = [
 				value: 'structured',
 				description: 'EHRBase Structured format (requires Template ID)',
 			},
+			{
+				name: 'XML (Standard openEHR)',
+				value: 'xml',
+				description: 'Standard openEHR XML format',
+			},
 		],
 		default: 'canonical',
 		displayOptions: {
 			show: {
 				resource: ['composition'],
-				operation: ['create', 'update'],
+				operation: ['create', 'update', 'createOrUpdate', 'commitRecord'],
 			},
 		},
 		description: 'The serialization format of the composition payload',
 	},
 	{
-		displayName: 'Template ID',
+		displayName: 'Template Name or ID',
 		name: 'templateId',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getTemplates',
+		},
 		default: '',
 		required: true,
 		displayOptions: {
 			show: {
 				resource: ['composition'],
-				operation: ['create', 'update'],
+				operation: ['create', 'update', 'createOrUpdate', 'commitRecord'],
 				format: ['flat', 'structured'],
 			},
 		},
-		description: 'The ID of the template used for Flat/Structured format validation',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>',
 	},
 	{
 		displayName: 'Composition Payload',
@@ -121,7 +171,7 @@ export const compositionFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['composition'],
-				operation: ['create', 'update'],
+				operation: ['create', 'update', 'createOrUpdate', 'commitRecord'],
 			},
 			hide: {
 				format: ['xml'],
@@ -138,7 +188,7 @@ export const compositionFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['composition'],
-				operation: ['create', 'update'],
+				operation: ['create', 'update', 'createOrUpdate', 'commitRecord'],
 				format: ['xml'],
 			},
 		},
@@ -153,7 +203,7 @@ export const compositionFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['composition'],
-				operation: ['create', 'update'],
+				operation: ['create', 'update', 'createOrUpdate'], // CommitRecord handles preferRepresentation implicitly
 			},
 		},
 		options: [
@@ -174,7 +224,43 @@ export const compositionFields: INodeProperties[] = [
 				default: 'representation',
 				description: 'The client preference for what metadata/data to return',
 			},
+			{
+				displayName: 'Output Format',
+				name: 'outputFormat',
+				type: 'options',
+				options: [
+					{
+						name: 'Raw',
+						value: 'raw',
+						description: 'Return the raw response from EHRbase',
+					},
+					{
+						name: 'Simplified',
+						value: 'simplified',
+						description: 'Simplify the response by flattening values',
+					},
+				],
+				default: 'raw',
+				description: 'Whether to return raw EHRbase structure or a simplified version',
+			},
 		],
+	},
+
+	// ----------------------------------
+	// Composition: Create or Update
+	// ----------------------------------
+	{
+		displayName: 'Version UID',
+		name: 'versionUid',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['composition'],
+				operation: ['createOrUpdate'],
+			},
+		},
+		description: 'If provided, the composition will be updated. If empty, it will be created. (e.g. 884dd000-0000-0000-0000-000000000000::org.openehr::1)',
 	},
 
 	// ----------------------------------
