@@ -16,7 +16,7 @@ We initialized the project and created the following layout:
 - **Node Implementations**:
   - [GenericFunctions.ts](file:///wsl.localhost/Ubuntu/home/jonakunze/projects/vg-ehrbase-n8n/nodes/EHRBase/GenericFunctions.ts): A wrapper handling EHRBase HTTP requests, parsing parameters, setting the correct Content-Type (handling raw XML templates, JSON, Flat, and Structured formats), and adding authorization headers.
   - [EHRBase.node.ts](file:///wsl.localhost/Ubuntu/home/jonakunze/projects/vg-ehrbase-n8n/nodes/EHRBase/EHRBase.node.ts): Core class routing executions for each resource.
-  - [ehrbase.svg](file:///wsl.localhost/Ubuntu/home/jonakunze/projects/vg-ehrbase-n8n/nodes/EHRBase/ehrbase.svg): A clean custom health database logo.
+  - [ehrbase.png](file:///wsl.localhost/Ubuntu/home/jonakunze/projects/vg-ehrbase-n8n/nodes/EHRBase/ehrbase.png): A clean custom health database logo.
 
 - **Resource UI Fields**:
   - [EHRDescription.ts](file:///wsl.localhost/Ubuntu/home/jonakunze/projects/vg-ehrbase-n8n/nodes/EHRBase/EHRDescription.ts): EHR Create (auto or custom ID, custom status) and Get (EHR ID or Subject/Namespace ID).

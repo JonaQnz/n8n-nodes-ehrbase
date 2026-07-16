@@ -1,11 +1,11 @@
 {
   "name": "n8n-nodes-ehrbase",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "n8n integration for EHRBase (openEHR)",
   "main": "dist/nodes/EHRBase/EHRBase.node.js",
   "scripts": {
     "build": "tsc && npm run copy-assets",
-    "copy-assets": "node -e \"const fs=require('fs'); if(!fs.existsSync('dist/nodes/EHRBase')) fs.mkdirSync('dist/nodes/EHRBase', {recursive:true}); if(fs.existsSync('nodes/EHRBase/ehrbase.svg')) fs.copyFileSync('nodes/EHRBase/ehrbase.svg', 'dist/nodes/EHRBase/ehrbase.svg'); \"",
+    "copy-assets": "node -e \"const fs=require('fs'); if(!fs.existsSync('dist/nodes/EHRBase')) fs.mkdirSync('dist/nodes/EHRBase', {recursive:true}); if(fs.existsSync('nodes/EHRBase/ehrbase.png')) fs.copyFileSync('nodes/EHRBase/ehrbase.png', 'dist/nodes/EHRBase/ehrbase.png'); \"",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

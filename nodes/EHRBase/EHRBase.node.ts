@@ -28,7 +28,7 @@ export class EHRBase implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'EHRBase',
 		name: 'ehrBase',
-		icon: 'file:ehrbase.svg',
+		icon: 'file:ehrbase.png',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
@@ -147,7 +147,7 @@ export class EHRBase implements INodeType {
 				try {
 					const additionalOptions = this.getNodeParameter('options', i, {}) as JsonObject;
 					outputFormat = (additionalOptions.outputFormat as string) || 'raw';
-				} catch (e) {}
+				} catch (e) { }
 
 				const normalized = normalizeResponse(responseData, outputFormat);
 				const executionData = this.helpers.returnJsonArray(normalized as JsonObject);
