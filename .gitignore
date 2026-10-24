@@ -28,3 +28,12 @@ yarn-error.log*
 logs/
 *.log
 walkthrough.md
+# AI Dev Home: secrets and runtime files stay out of Git
+.env.*
+!.env.example
+*.pem
+*.key
+__pycache__/
+.venv/
+.omc/
+.pytest_cache/

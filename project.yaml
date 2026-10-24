@@ -1,0 +1,16 @@
+# Created by AI Dev Home project init - review type, test command and docs.
+schema_version: 1
+id: n8n-nodes-ehrbase
+name: n8n-nodes-ehrbase
+description: ''
+type: library
+repository:
+  default_branch: main
+  integration_branch: develop
+stack:
+- node
+test:
+  unit: 'TODO: set the unit test command'
+docs:
+  readme: README.md
+  agents: AGENTS.md
